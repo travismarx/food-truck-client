@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  font-family: "Roboto", sans-serif;
+}
+
+.divider {
+  height: 1px;
+  margin: 20px auto;
+  width: 88%;
+  margin-left: 6%;
+  //   background: grey;
+  background: #ffc008;
+}
+
+button {
+  touch-action: manipulation;
+}

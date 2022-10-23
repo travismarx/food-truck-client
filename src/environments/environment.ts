@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  // apiRoot: 'http://70.180.240.25:3000',
+  // apiRoot: 'http://192.168.86.26:3000',
+  apiRoot: 'http://localhost:3000',
 };
 
 /*

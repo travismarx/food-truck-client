@@ -1,0 +1,162 @@
+<div
+  class="sessions-page flex flex-column align-items-center justify-content-center"
+>
+  <div class="logo">
+    <img
+      height="100"
+      src="https://worldsbestcorndogs.com/wp-content/uploads/logo-world_greatest_corndogs@2x.png"
+    />
+  </div>
+  <h3>Start New Session</h3>
+  <div
+    class="session-options flex flex-column justify-content-center align-items-center"
+  >
+    <ng-container *ngFor="let option of sessionOptions">
+      <button
+        pButton
+        [label]="option.title"
+        (click)="openStartSessionDialog(option)"
+      ></button>
+    </ng-container>
+  </div>
+  <div class="divider flex justify-content-center align-items-center"></div>
+
+  <h4>Join Open Session</h4>
+  <div
+    class="session-options flex flex-column justify-content-center align-items-center"
+  >
+    <p *ngIf="!openSessions?.length">(No sessions available right now)</p>
+    <ng-container *ngFor="let session of openSessions">
+      <button
+        pButton
+        type="button"
+        class="p-button-outlined p-button-info"
+        [label]="session.title"
+        (click)="joinExistingSession(session)"
+      ></button>
+    </ng-container>
+  </div>
+</div>
+
+<p-dialog
+  header="New Session"
+  [(visible)]="showStartSessionDialog"
+  [style]="{ 'min-width': '80vw' }"
+  position="top"
+  [closeOnEscape]="false"
+  [closable]="false"
+  [modal]="true"
+>
+  <br />
+  <div class="new-session-title-input flex flex-column">
+    <!-- <span class="p-float-label"> -->
+    <label for="float-input"><b>Session Title</b></label>
+    <input
+      id="session-title"
+      type="text"
+      pInputText
+      [(ngModel)]="newSessionTitle"
+    />
+    <!-- </span> -->
+  </div>
+  <br />
+  <div class="menu-selection flex flex-column">
+    <label><b>Select Menu</b></label>
+    <p-dropdown
+      styleClass="dropdown flex"
+      [options]="menuOptions"
+      [(ngModel)]="newSessionMenuType"
+      optionLabel="title"
+      style="width: 100%"
+    ></p-dropdown>
+  </div>
+  <div class="selected-menu-items">
+    <br />
+    <ng-container *ngIf="!newSessionMenuType?.menuTypeId">
+      <p-checkbox
+        [(ngModel)]="saveNewMenu"
+        [binary]="true"
+        inputId="binary"
+      ></p-checkbox>
+      <label for="binary" placeholder="New Menu Name" class="ml-1"
+        ><b>Save Menu</b></label
+      >
+      <br />
+      <br />
+      <div class="new-session-title-input flex flex-column">
+        <label for="float-input" *ngIf="saveNewMenu"
+          ><b>New Menu Title</b></label
+        >
+        <input
+          id="float-input"
+          type="text"
+          pInputText
+          *ngIf="saveNewMenu"
+          [(ngModel)]="newMenuTitle"
+        />
+      </div>
+    </ng-container>
+    <br />
+
+    <p-table
+      [value]="newSessionMenuType?.items"
+      responsiveLayout="scroll"
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Item</th>
+          <th>Price</th>
+          <th *ngIf="!newSessionMenuType?.menuTypeId">Enabled</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item let-idx="rowIndex">
+        <tr
+          [ngStyle]="{
+            'border-left': '10px solid ' + item.colorCode,
+            'border-bottom': '2px solid ' + item.colorCode
+          }"
+        >
+          <td>{{ item.stub }}</td>
+          <td>
+            <div class="flex align-items-center">
+              <p-button
+                icon="pi pi-minus"
+                styleClass="p-button-sm p-button-sm p-button-secondary mr-2"
+                *ngIf="!newSessionMenuType?.menuTypeId"
+                (click)="decrementPrice(idx)"
+              ></p-button>
+              {{ item.price }}
+              <p-button
+                icon="pi pi-plus"
+                styleClass="p-button-sm p-button-secondary ml-2"
+                *ngIf="!newSessionMenuType?.menuTypeId"
+                (click)="incrementPrice(idx)"
+              ></p-button>
+            </div>
+          </td>
+          <td *ngIf="!newSessionMenuType?.menuTypeId">
+            <p-inputSwitch [(ngModel)]="item.enabled"></p-inputSwitch>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button
+      icon="pi pi-times"
+      (click)="cancelNewSession()"
+      label="Cancel"
+      styleClass="p-button-secondary p-button-text"
+    ></p-button>
+    <p-button
+      icon="pi pi-check"
+      (click)="startNewSession(startingSessionType)"
+      [disabled]="
+        !newSessionMenuType?.menuTypeId && saveNewMenu && !newMenuTitle
+      "
+      [loading]="isStartingSession"
+      label="Start Session"
+    ></p-button>
+  </ng-template>
+</p-dialog>

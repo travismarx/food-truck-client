@@ -1,0 +1,8 @@
+<div>Work In Progress</div>
+
+<div *ngFor="let order of orders" class="flex">
+  Name: {{ order.customerName }}
+  <div *ngFor="let item of order.items" class="ml-1">
+    {{ item.stub }} ({{ item.quantity }})
+  </div>
+</div>

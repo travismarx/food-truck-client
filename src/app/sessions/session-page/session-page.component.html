@@ -1,0 +1,221 @@
+<p-toast position="top-center"></p-toast>
+<div
+  class="flex justify-content-center align-items-center"
+  *ngIf="loadingSession"
+>
+  <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- <div class="w-full">
+  <ul class="menu-tabs">
+    <li>Send</li>
+    <li>Receive</li>
+    <li>Report</li>
+  </ul>
+  <p-tabMenu
+    [model]="menuItems"
+    [activeItem]="activeTab"
+    styleClass="mb-3 tabs"
+  >
+    <ng-template pTemplate="item" let-item let-i="index">
+      <div class="col col-4 menu-item">{{ item.label }}</div>
+    </ng-template>
+  </p-tabMenu>
+</div> -->
+<p-tabView>
+  <p-tabPanel header="Send">
+    <div class="order-send">
+      <div
+        class="row-zero flex justify-content-end align-items-center mb-2"
+        *ngIf="!loadingSession"
+      >
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="Send Order"
+          class="p-button-info w-3 text-1xl"
+          [disabled]="!currentOrder.customerName || !currentOrder.totalCost"
+          (click)="sendOrder()"
+        ></button>
+      </div>
+      <div
+        class="row-one flex justify-content-end align-items-center mb-2"
+        *ngIf="!loadingSession"
+      ></div>
+      <div
+        class="row-two flex justify-content-between align-items-center mb-2"
+        *ngIf="!loadingSession"
+      >
+        <input
+          type="text"
+          class="p-inputtext-md"
+          placeholder="Customer Name"
+          pInputText
+          [(ngModel)]="currentOrder.customerName"
+        />
+        <div class="text-xl">Order Total: ${{ currentOrder.totalCost }}</div>
+      </div>
+
+      <div
+        class="row-three flex justify-content-between align-items-center mb-2"
+        *ngIf="!loadingSession"
+      >
+        <p-inputNumber
+          class="p-inputtext-md"
+          placeholder="Buzzer #"
+          [showClear]="true"
+          [(ngModel)]="currentOrder.buzzerNumber"
+          (onInput)="onBuzzerInput($event)"
+          (onClear)="clearBuzzerInput()"
+        ></p-inputNumber>
+        <p-inputNumber
+          class="p-inputtext-md"
+          placeholder="Amount Paid"
+          [showClear]="true"
+          [(ngModel)]="currentOrder.paid"
+          (onInput)="onPaidInput($event)"
+          (onClear)="clearPaidInput()"
+        ></p-inputNumber>
+        <!-- <p-inputNumber
+          class="p-inputtext-md"
+          placeholder="Amount Paid"
+          [showClear]="true"
+          [(ngModel)]="currentOrder.paid"
+          (onInput)="onPaidInput($event)"
+          (onClear)="clearPaidInput()"
+        ></p-inputNumber> -->
+      </div>
+
+      <div
+        class="row-four flex justify-content-between align-items-center mb-2"
+        *ngIf="!loadingSession"
+      >
+        <input
+          type="text"
+          class="p-inputtext-md"
+          placeholder="Notes"
+          pInputText
+          [(ngModel)]="currentOrder.notes"
+        />
+        <div class="text-xl">Change Due: ${{ currentOrder.change }}</div>
+      </div>
+
+      <div class="money-buttons flex w-full">
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="$1"
+          class="p-button-outlined p-button-success w-3 text-2xl"
+          (click)="increaseAmountPaid(1)"
+        ></button>
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="$5"
+          class="p-button-outlined p-button-success w-3 text-2xl"
+          (click)="increaseAmountPaid(5)"
+        ></button>
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="$10"
+          class="p-button-outlined p-button-success w-3 text-2xl"
+          (click)="increaseAmountPaid(10)"
+        ></button>
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="$20"
+          class="p-button-outlined p-button-success w-3 text-2xl"
+          (click)="increaseAmountPaid(20)"
+        ></button>
+      </div>
+
+      <br />
+
+      <div class="flex justify-content-between w-full" *ngIf="!loadingSession">
+        <div class="menu-items w-full text-4xl">
+          <p-table [value]="currentOrder?.items" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+              <tr class="font-bold surface-300">
+                <th class="font-bold text-900 surface-300">Item</th>
+                <th class="font-bold text-900 surface-300">Quantity</th>
+                <th class="font-bold text-900 surface-300">Price</th>
+                <th class="font-bold text-900 surface-300">Total</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item let-idx="rowIndex">
+              <tr
+                class="item-font-size text-900 table-body-row"
+                [ngStyle]="{
+                  background: item.colorCode
+                }"
+              >
+                <td class="p-0 pl-2 border-none">{{ item.stub }}</td>
+                <td class="p-0 border-none">
+                  <div class="item-quantity flex align-items-center mt-1 mb-1">
+                    <div
+                      class="flex bg-white border-round-lg align-items-center"
+                    >
+                      <p-button
+                        icon="pi pi-minus"
+                        styleClass="p-button-secondary mr-2 p-button-lg"
+                        (click)="decreaseQuantity(idx)"
+                      ></p-button>
+                      <div class="p-1">
+                        {{ item.quantity }}
+                      </div>
+                      <p-button
+                        icon="pi pi-plus"
+                        styleClass="p-button-secondary ml-2 p-button-lg"
+                        (click)="increaseQuantity(idx)"
+                      ></p-button>
+                    </div>
+                  </div>
+                </td>
+                <td class="p-0 border-none">* {{ item.price }} =</td>
+                <td class="p-0 border-none">${{ item.totalCost }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+          <!---->
+          <!-- <div
+            *ngFor="let item of currentOrder?.items; let idx = index"
+            class="flex align-items-center justify-content-evenly w-full p-2 font-bold text-4xl"
+          >
+            <div class="item-name">{{ item.stub }}</div>
+            <div class="item-name">{{ item.price }}</div>
+            <div class="item-quantity flex align-items-center">
+              <p-button
+                icon="pi pi-minus"
+                styleClass="p-button-secondary mr-2"
+                (click)="decreaseQuantity(idx)"
+              ></p-button>
+              {{ item.quantity }}
+              <p-button
+                icon="pi pi-plus"
+                styleClass="p-button-secondary ml-2"
+                (click)="increaseQuantity(idx)"
+              ></p-button>
+            </div>
+            <div class="total-cost">
+              {{ item.totalCost }}
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </p-tabPanel>
+  <p-tabPanel header="Receive">
+    <app-order-receive [orders]="openOrders"></app-order-receive>
+  </p-tabPanel>
+  <p-tabPanel header="Report">
+    <div class="order-receive">Report page</div>
+  </p-tabPanel>
+</p-tabView>
