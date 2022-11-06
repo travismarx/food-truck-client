@@ -1,0 +1,22 @@
+<div class="flex flex-column align-items-center">
+  <p-calendar
+    [(ngModel)]="value"
+    placeholder="Search date"
+    [showIcon]="true"
+    [maxDate]="maxDate"
+    [touchUI]="true"
+    [showButtonBar]="true"
+    (onClearClick)="onDateSelect(null)"
+    (onSelect)="onDateSelect($event)"
+  ></p-calendar>
+  <div class="p-inputgroup">
+    <input
+      type="text"
+      class="p-inputtext-md mt-3 mb-3"
+      placeholder="Search title text"
+      pInputText
+      [(ngModel)]="text"
+      (ngModelChange)="onTextInput($event)"
+    />
+  </div>
+</div>

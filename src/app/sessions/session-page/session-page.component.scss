@@ -2,6 +2,49 @@
   padding: 0.3em !important;
 }
 
+.socket-indicator-wrapper {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  height: 30px;
+  width: 30px;
+  border-radius: 5px;
+  z-index: 9999;
+  background: rgba(24, 24, 44, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 1px 1px 2px 0px #797676;
+  .socket-indicator {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+  }
+}
+
+.quantity-field {
+  display: flex;
+  max-width: 50px;
+  height: inherit;
+  overflow: hidden;
+  text-align: center;
+  .p-inputtext {
+    width: auto;
+    max-width: 50px;
+    text-align: center;
+  }
+  input {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    border: none;
+  }
+}
+
+.mw-50 {
+  max-width: 50%;
+}
+
 .item-font-size {
   font-size: 1.5rem;
   @media screen and (max-width: 600px) {

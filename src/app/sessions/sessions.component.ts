@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionsService } from './sessions.service';
+import { Message, MessageService } from 'primeng/api';
 // import { ConfirmationService } from 'primeng/api';
 
 interface SessionType {
@@ -15,6 +16,7 @@ interface SessionType {
 })
 export class SessionsComponent implements OnInit {
   loadingOptions = false;
+  loadingOpenSessions = false;
   sessionOptions: any;
   openSessions: any;
   menuOptions: any[] = [];
@@ -25,9 +27,14 @@ export class SessionsComponent implements OnInit {
   newMenuTitle = '';
   saveNewMenu = false;
   isStartingSession = false;
+  sessionLookupResults = [];
+  loadingLookups = false;
+  lookupDate = null;
+  lookupText = null;
 
   constructor(
     private sessionsService: SessionsService,
+    private messageService: MessageService,
     private router: Router // private confirmationService: ConfirmationService
   ) {}
 
@@ -38,32 +45,55 @@ export class SessionsComponent implements OnInit {
   }
 
   loadOptions() {
-    this.sessionsService.getSessionOptions().subscribe((options) => {
-      this.sessionOptions = options;
-    });
+    this.loadingOptions = true;
+    this.sessionsService.getSessionOptions().subscribe(
+      (options) => {
+        this.loadingOptions = false;
+        this.sessionOptions = options;
+      },
+      (err) => {
+        this.loadingOptions = false;
+        this.showToast(
+          'error',
+          'Error',
+          'An error occurred while loading menu options.',
+          5000
+        );
+      }
+    );
   }
 
   loadOpenSessions() {
-    this.sessionsService.getOpenSessions().subscribe((sessions) => {
-      this.openSessions = sessions;
-    });
+    this.loadingOpenSessions = true;
+    this.sessionsService.getOpenSessions().subscribe(
+      (sessions) => {
+        this.loadingOpenSessions = false;
+        this.openSessions = sessions;
+      },
+      (err) => {
+        this.loadingOpenSessions = false;
+        this.showToast(
+          'error',
+          'Error',
+          'An error occurred while loading open sessions.',
+          5000
+        );
+      }
+    );
   }
 
   loadMenuOptions() {
     this.sessionsService.getMenuOptions().subscribe((options) => {
-      console.log('MENU OPTIONS: ', options);
       this.menuOptions = JSON.parse(JSON.stringify(options)).map((group) => {
         for (let item of group.items) {
           item.enabled = true;
         }
         return group;
       });
-      console.log(this.menuOptions, 'menu options');
     });
   }
 
   openStartSessionDialog(sessionType: SessionType) {
-    console.log(sessionType);
     this.startingSessionType = sessionType;
     this.newSessionTitle = `${
       sessionType.title
@@ -72,7 +102,6 @@ export class SessionsComponent implements OnInit {
   }
 
   startNewSession(sessionType: SessionType) {
-    console.log('start new session with type: ', sessionType);
     const newSessionBody = {
       sessionTypeId: sessionType.sessionTypeId,
       sessionTitle: this.newSessionTitle,
@@ -82,15 +111,21 @@ export class SessionsComponent implements OnInit {
         saveNewMenu: this.saveNewMenu,
       },
     };
-    console.log('NEW SESSION BODY: ', newSessionBody);
     this.isStartingSession = true;
-    this.sessionsService
-      .startNewSession(newSessionBody)
-      .subscribe((res: any) => {
-        console.log(res, 'res for new session');
+    this.sessionsService.startNewSession(newSessionBody).subscribe(
+      (res: any) => {
         this.isStartingSession = false;
         this.router.navigate([`/sessions/${res.sessionId}`]);
-      });
+      },
+      (err) => {
+        this.showToast(
+          'error',
+          'Error',
+          'An error occurred while starting the session. Please try again.',
+          5000
+        );
+      }
+    );
   }
 
   cancelNewSession() {
@@ -109,7 +144,60 @@ export class SessionsComponent implements OnInit {
   }
 
   joinExistingSession(session: any) {
-    console.log('join this session: ', session);
     this.router.navigate([`/sessions/${session.sessionId}`]);
+  }
+
+  onLookupDateSelect(date) {
+    this.lookupDate = date;
+    // this.loadingLookups = true;
+    // this.sessionsService.searchSessions(date).subscribe(
+    //   (res: any[]) => {
+    //     this.loadingLookups = false;
+    //     this.sessionLookupResults = res;
+    //   },
+    //   (err) => {
+    //     this.showToast(
+    //       'error',
+    //       'Error',
+    //       'An error occurred while searching for sessions. Please try again',
+    //       5000
+    //     );
+    //   }
+    // );
+  }
+
+  onLookupTextInput(text) {
+    this.lookupText = text;
+  }
+
+  lookupSessions() {
+    this.loadingLookups = true;
+    this.sessionsService
+      .searchSessions(this.lookupDate, this.lookupText)
+      .subscribe(
+        (res: any[]) => {
+          this.loadingLookups = false;
+          this.sessionLookupResults = res;
+        },
+        (err) => {
+          this.showToast(
+            'error',
+            'Error',
+            'An error occurred while searching for sessions. Please try again',
+            5000
+          );
+        }
+      );
+  }
+
+  showToast(severity, summary, detail, clearAfter) {
+    this.messageService.add({
+      severity: severity,
+      summary: summary,
+      detail: detail,
+    });
+    setTimeout(() => {
+      this.messageService.clear();
+    }, clearAfter);
   }
 }

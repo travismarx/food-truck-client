@@ -18,9 +18,17 @@ import { TabViewModule } from 'primeng/tabview';
 import { OrderSendComponent } from './order-send/order-send.component';
 import { OrderReceiveComponent } from './order-receive/order-receive.component';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { SlideMenuModule } from 'primeng/slidemenu';
 import { CacheInterceptor } from '../cache-interceptor.ts/cache-interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SessionReportComponent } from './session-report/session-report.component';
+import { SessionOptionsComponent } from './session-options/session-options.component';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { SessionLookupComponent } from './session-lookup/session-lookup.component';
+import { CalendarModule } from 'primeng/calendar';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [
@@ -28,6 +36,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     SessionPageComponent,
     OrderSendComponent,
     OrderReceiveComponent,
+    SessionReportComponent,
+    SessionOptionsComponent,
+    SessionLookupComponent,
   ],
   imports: [
     CommonModule,
@@ -44,10 +55,16 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     TabMenuModule,
     TabViewModule,
     ToastModule,
+    SlideMenuModule,
+    ConfirmPopupModule,
+    ConfirmDialogModule,
+    CalendarModule,
+    PaginatorModule,
   ],
   providers: [
     SessionsService,
     MessageService,
+    ConfirmationService,
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
   ],
 })

@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { SessionsModule } from './sessions/sessions.module';
 import { CacheInterceptor } from './cache-interceptor.ts/cache-interceptor';
+import { SocketioService } from './services/socketio.service';
 
 @NgModule({
   declarations: [AppComponent, ErrorPageComponent],
@@ -20,6 +21,7 @@ import { CacheInterceptor } from './cache-interceptor.ts/cache-interceptor';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
+    SocketioService,
   ],
   bootstrap: [AppComponent],
 })

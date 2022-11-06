@@ -7,7 +7,14 @@
       src="https://worldsbestcorndogs.com/wp-content/uploads/logo-world_greatest_corndogs@2x.png"
     />
   </div>
-  <h3>Start New Session</h3>
+  <h3>
+    Start New Session
+    <p-progressSpinner
+      [style]="{ width: '15px', height: '15px' }"
+      strokeWidth="8"
+      *ngIf="loadingOptions"
+    ></p-progressSpinner>
+  </h3>
   <div
     class="session-options flex flex-column justify-content-center align-items-center"
   >
@@ -21,12 +28,57 @@
   </div>
   <div class="divider flex justify-content-center align-items-center"></div>
 
-  <h4>Join Open Session</h4>
+  <h4>
+    Join Open Session
+    <p-progressSpinner
+      [style]="{ width: '15px', height: '15px' }"
+      strokeWidth="8"
+      *ngIf="loadingOpenSessions"
+    ></p-progressSpinner>
+  </h4>
   <div
     class="session-options flex flex-column justify-content-center align-items-center"
   >
     <p *ngIf="!openSessions?.length">(No sessions available right now)</p>
     <ng-container *ngFor="let session of openSessions">
+      <button
+        pButton
+        type="button"
+        class="p-button-outlined p-button-info"
+        [label]="session.title"
+        (click)="joinExistingSession(session)"
+      ></button>
+    </ng-container>
+  </div>
+  <div class="divider flex justify-content-center align-items-center"></div>
+  <h4>
+    Session Lookup
+    <p-progressSpinner
+      [style]="{ width: '15px', height: '15px' }"
+      strokeWidth="8"
+      *ngIf="loadingLookups"
+    ></p-progressSpinner>
+  </h4>
+  <app-session-lookup
+    (dateSelect)="onLookupDateSelect($event)"
+    (textInput)="onLookupTextInput($event)"
+  ></app-session-lookup>
+  <div class="col-12 md:col-3 pb-2 flex p-fluid">
+    <button
+      pButton
+      pRipple
+      type="button"
+      label="Search"
+      class="p-button-info text-1xl"
+      [loading]="loadingLookups"
+      (click)="lookupSessions()"
+    ></button>
+  </div>
+  <div
+    class="session-options flex flex-column justify-content-center align-items-center mt-3"
+  >
+    <p *ngIf="!sessionLookupResults?.length">No sessions found</p>
+    <ng-container *ngFor="let session of sessionLookupResults">
       <button
         pButton
         type="button"

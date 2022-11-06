@@ -1,8 +1,233 @@
-<div>Work In Progress</div>
+<audio id="audioplayer" src="../../../assets/dingsound.mp3">
+  <!-- // AAC file (Chrome/Safari/IE9) -->
+  <!-- <source src="../../../assets/aooga.mp3" type="audio/mp4" /> -->
+  <!-- // Ogg Vorbis (Firefox) -->
+</audio>
+<div class="order-receive">
+  <div class="top-table-wrapper" #tableWrapper>
+    <table class="top-table text-900" *ngIf="menuLabels.length">
+      <thead>
+        <tr class="p1 mb-2">
+          <th
+            *ngFor="let item of menuLabels"
+            class="pt-1 pb-1 mb-2 header-text"
+            width="{{ labelWidth }}"
+            [ngStyle]="{ background: item.colorCode, width: labelWidth }"
+          >
+            {{ item.stub }}
+          </th>
+          <th
+            class="current-time"
+            width="{{ labelWidth }}"
+            [ngStyle]="{ width: labelWidth }"
+          >
+            {{ now | date: "h:mm" }} ({{ avgOrderTime || 0 }})
+          </th>
+        </tr>
+      </thead>
 
-<div *ngFor="let order of orders" class="flex">
-  Name: {{ order.customerName }}
-  <div *ngFor="let item of order.items" class="ml-1">
-    {{ item.stub }} ({{ item.quantity }})
+      <tbody>
+        <!-- <tr class="empty-row-spacer"> -->
+        <tr>
+          <td class="empty-row-blank" colspan="100%"></td>
+        </tr>
+        <tr>
+          <td class="empty-row-spacer" colspan="100%"></td>
+        </tr>
+        <tr>
+          <td class="empty-row-blank" colspan="100%"></td>
+        </tr>
+        <!-- </tr> -->
+        <tr>
+          <td
+            *ngFor="let item of quantityPerItem"
+            [ngStyle]="item?.quantity && { background: item.colorCode }"
+          >
+            <div
+              class="pt-2 pb-2 quantity-big flex justify-content-center font-bold"
+            >
+              {{ item?.quantity || "" }}
+            </div>
+          </td>
+          <td>
+            <div class="flex justify-content-center align-items-center">
+              <p-button
+                icon="pi pi-refresh"
+                styleClass="p-button-outlined p-button-secondary p-button-lg"
+                [loading]="loadingOrders"
+                (click)="refreshOrders.emit()"
+              ></p-button>
+            </div>
+          </td>
+          <td>
+            <div class="flex flex-column">
+              <label>Sound</label>
+              <p-inputSwitch [(ngModel)]="playOrderSound"></p-inputSwitch>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="empty-row-blank" colspan="100%"></td>
+        </tr>
+        <tr>
+          <td class="empty-row-spacer" colspan="100%"></td>
+        </tr>
+        <tr>
+          <td class="empty-row-blank" colspan="100%"></td>
+        </tr>
+
+        <tr *ngFor="let order of formattedOrders">
+          <td
+            *ngFor="let quantity of order.quantityObject"
+            [ngStyle]="quantity.quantity && { background: quantity.colorCode }"
+            style="margin-bottom: 2px"
+          >
+            <div
+              class="pt-2 pb-2 order-quantity flex justify-content-center font-bold"
+            >
+              {{ quantity.quantity || "" }}
+            </div>
+          </td>
+          <td>
+            <div
+              class="flex justify-content-between align-items-center pl-1 pr-1"
+            >
+              <div
+                class="flex flex-grow-1 justify-content-center align-items-center"
+              >
+                <b
+                  *ngIf="order.buzzerNumber"
+                  class="pr-1 text-center text-xl text-red-500"
+                  >{{ order.buzzerNumber }}</b
+                >
+                <b class="mr-1 text-xl">{{ order.customerName || "N/A" }}</b>
+              </div>
+              <span>
+                ({{
+                  order.createdTimestamp &&
+                    (nowTimestamp - order.createdTimestamp) / 60
+                    | number: "1.0-0"
+                }}m)
+              </span>
+            </div>
+            <div
+              class="font-italic p-1 bg-yellow-200 text-color border-round-md text-center ml-1 mr-1"
+              *ngIf="order.notes"
+            >
+              {{ order.notes }}
+            </div>
+          </td>
+          <td>
+            <div class="flex justify-content-end align-items-center pr-1">
+              <p-button
+                styleClass="p-button-info p-2"
+                iconPos="right"
+                (click)="onOrderReady.emit(order.orderId)"
+              >
+                <div class="flex flex-column">
+                  Ready
+                  <!-- <b *ngIf="order.buzzerNumber" class="pl-1">
+                    ({{ order.buzzerNumber }})
+                  </b> -->
+                </div>
+              </p-button>
+              <!-- <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-check"
+                class="p-button-info"
+                (click)="onOrderReady.emit(order.orderId)"
+              ></button> -->
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+  <!-- <p-table [value]="menuLabels" responsiveLayout="scroll">
+  <ng-template pTemplate="header">
+    <tr class="font-bold surface-300">
+      <th *ngFor="let item of menuLabels">
+        {{ item.stub }}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item let-idx="rowIndex"> </ng-template>
+</p-table> -->
+
+  <!-- <h3>
+    Previous Orders
+    <p-progressSpinner
+      [style]="{ width: '15px', height: '15px' }"
+      strokeWidth="8"
+      *ngIf="loadingReadyOrders"
+      >Loading...</p-progressSpinner
+    >
+  </h3>
+  <div *ngFor="let order of readyOrders" class="flex">
+    <b class="mr-1">{{ order.customerName || "N/A" }} |</b>
+    <div class="mr-1">
+      {{ order.startTime | date: "shortTime" }} -
+      {{ order.readyTime | date: "shortTime" }} |
+    </div>
+    <div *ngIf="order.buzzerNumber" class="mr-1">
+      Buzzer: {{ order.buzzerNumber }} |
+    </div>
+    <div *ngIf="order.notes" class="mr-1">Notes: {{ order.notes }} |</div>
+    <div *ngFor="let item of order.items; let idx = index" class="ml-1">
+      {{ item.stub }} ({{ item.quantity }}){{
+        idx !== order.items.length - 1 ? "," : ""
+      }}
+    </div>
+  </div> -->
+  <!-- <h3>
+    Previous Orders
+    <p-progressSpinner
+      [style]="{ width: '15px', height: '15px' }"
+      strokeWidth="8"
+      *ngIf="loadingReadyOrders"
+      >Loading...</p-progressSpinner
+    >
+  </h3>
+  <p-table
+    [value]="readyOrders"
+    responsiveLayout="scroll"
+    [loading]="loadingReadyOrders"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th style="width: 200px">Start - Ready</th>
+        <th>Items</th>
+        <th>Notes</th>
+        <th>Buzzer</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-order>
+      <tr>
+        <td>{{ order.customerName }}</td>
+        <td style="width: 200px">
+          {{ order.startTime | date: "shortTime" }} -
+          {{ order.readyTime | date: "shortTime" }}
+        </td>
+        <td style="min-width: 200px">
+          <div class="flex">
+            <div *ngFor="let item of order.items; let idx = index" class="mr-1">
+              {{ item.stub }} ({{ item.quantity }}){{
+                idx !== order.items.length - 1 ? ", " : ""
+              }}
+            </div>
+          </div>
+        </td>
+        <td>{{ order.notes }}</td>
+        <td>{{ order.buzzerNumber }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-paginator
+    [rows]="10"
+    [totalRecords]="readyOrdersCount"
+    (onPageChange)="paginate($event)"
+  ></p-paginator> -->
 </div>

@@ -1,0 +1,49 @@
+<p-confirmDialog
+  #confirmDialog
+  header="Confirmation"
+  icon="pi pi-exclamation-triangle"
+  acceptLabel="End Session"
+  rejectLabel="No"
+  acceptButtonStyleClass="p-button-danger"
+  [style]="{ 'max-width': '80vw' }"
+>
+  <ng-template pTemplate="footer">
+    <p class="font-italic" *ngIf="incompleteOrdersLength > 0">
+      Cannot end session while orders are still open
+    </p>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-times"
+      label="No"
+      (click)="confirmDialog.reject()"
+    ></button>
+    <button
+      [disabled]="incompleteOrdersLength > 0 || sessionStatus === 'complete'"
+      type="button"
+      class="p-button-danger"
+      pButton
+      icon="pi pi-check"
+      label="End Session"
+      (click)="confirmDialog.accept()"
+    ></button>
+  </ng-template>
+</p-confirmDialog>
+<div class="flex justify-content-end mb-2">
+  <button
+    #btn
+    type="button"
+    pButton
+    icon="pi pi-chevron-down"
+    label="Session Options"
+    iconPos="right"
+    (click)="menu.toggle($event)"
+  ></button>
+  <p-slideMenu
+    #menu
+    [model]="items"
+    [popup]="true"
+    [viewportHeight]="130"
+    [style]="{ 'min-width': '175px' }"
+  ></p-slideMenu>
+</div>
