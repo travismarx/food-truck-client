@@ -6,12 +6,12 @@ export const environment = {
   production: false,
   // apiRoot: 'http://70.180.240.25:3000',
   // apiRoot: 'http://192.168.86.26:3000',
-  // apiRoot: 'http://localhost:3000',
-  // socketUrl: 'http://localhost:3000',
+  apiRoot: 'http://localhost:3000',
+  socketUrl: 'http://localhost:3000',
   // apiRoot: 'http://localhost:3000',
   // socketUrl: 'http://192.168.86.26:3000',
-  apiRoot: 'https://cdapi.pulpmxfantasy.com',
-  socketUrl: 'https://cdapi.pulpmxfantasy.com',
+  // apiRoot: 'https://cdapi.pulpmxfantasy.com',
+  // socketUrl: 'https://cdapi.pulpmxfantasy.com',
 };
 
 /*
