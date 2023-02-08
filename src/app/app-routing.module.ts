@@ -12,7 +12,6 @@ const routes: Routes = [
   },
   {
     path: 'sessions',
-    // component: SessionsComponent,
     children: [
       {
         path: '',

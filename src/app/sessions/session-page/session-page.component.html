@@ -24,22 +24,6 @@
   <p-progressSpinner stroke="#0288D1"></p-progressSpinner>
 </div>
 
-<!-- <div class="w-full">
-  <ul class="menu-tabs">
-    <li>Send</li>
-    <li>Receive</li>
-    <li>Report</li>
-  </ul>
-  <p-tabMenu
-    [model]="menuItems"
-    [activeItem]="activeTab"
-    styleClass="mb-3 tabs"
-  >
-    <ng-template pTemplate="item" let-item let-i="index">
-      <div class="col col-4 menu-item">{{ item.label }}</div>
-    </ng-template>
-  </p-tabMenu>
-</div> -->
 <p-tabView (onChange)="onTabChange($event)" [(activeIndex)]="activeTabIdx">
   <p-tabPanel header="Send" *ngIf="sessionInfo?.status !== 'complete'">
     <div class="order-send" *ngIf="activeTabIdx === 0">
@@ -64,15 +48,7 @@
         class="row-two flex justify-content-between align-items-center mb-2 p-fluid"
         *ngIf="!loadingSession"
       >
-        <div class="col-6 md:col-3 lg:col-3 p-0">
-          <!-- <input
-            type="text"
-            class="p-inputtext-md"
-            placeholder="Customer Name"
-            pInputText
-            [(ngModel)]="currentOrder.customerName"
-          /> -->
-        </div>
+        <div class="col-6 md:col-3 lg:col-3 p-0"></div>
         <div class="col-6 md:col-3 lg:col-3 p-0">
           <div class="text-xl text-right">
             Order Total: ${{ currentOrder.totalCost }}
@@ -92,14 +68,6 @@
             [disabled]="sendingOrder"
             [(ngModel)]="currentOrder.customerName"
           />
-          <!-- <p-inputNumber
-            class="p-inputtext-md max-w-full"
-            placeholder="Buzzer #"
-            [showClear]="true"
-            [(ngModel)]="currentOrder.buzzerNumber"
-            (onInput)="onBuzzerInput($event)"
-            (onClear)="clearBuzzerInput()"
-          ></p-inputNumber> -->
         </div>
         <div class="col-6 md:col-3 lg:col-3 p-0">
           <div class="text-xl text-right">
@@ -164,62 +132,6 @@
           ></p-dropdown>
         </div>
       </div>
-      <!-- <div class="p-0 pb-2">
-              <p-inputNumber
-                class="p-inputtext-md max-w-full"
-                placeholder="Buzzer #"
-                [showClear]="true"
-                [(ngModel)]="currentOrder.buzzerNumber"
-                (onInput)="onBuzzerInput($event)"
-                (onClear)="clearBuzzerInput()"
-              ></p-inputNumber>
-            </div>
-            <div class="pb-0">
-              <p-dropdown
-                [options]="sessionInfo?.notesOptions"
-                [(ngModel)]="currentOrder.notes"
-                placeholder="Notes"
-                optionLabel="label"
-                [showClear]="true"
-                [editable]="true"
-                (onChange)="applyDiscount($event)"
-              ></p-dropdown>
-            </div> -->
-      <!-- <div class="flex col-6 p-0 justify-content-end">
-          <div class="col-12 md:col-6 lg:col-6 p-0">
-            <div class="pb-2">
-              <div class="text-xl text-right">
-                Order Total: ${{ currentOrder.totalCost }}
-              </div>
-            </div>
-            <div class="pb-2">
-              <div class="text-xl text-right">
-                Change Due: ${{ currentOrder.change }}
-              </div>
-            </div>
-            <div class="pb-2">
-              <p-inputNumber
-                class="p-inputtext-md max-w-full"
-                placeholder="Amount Paid"
-                [showClear]="true"
-                [(ngModel)]="currentOrder.paid"
-                (onInput)="onPaidInput($event)"
-                (onClear)="clearPaidInput()"
-              ></p-inputNumber>
-            </div>
-            <div class="pb-2">
-              <p-dropdown
-                [options]="sessionInfo?.discountOptions"
-                [(ngModel)]="selectedDiscount"
-                placeholder="Discount Options"
-                optionLabel="label"
-                [showClear]="true"
-                [editable]="true"
-                (onChange)="applyDiscount($event)"
-              ></p-dropdown>
-            </div>
-          </div>
-        </div> -->
 
       <div class="money-buttons flex w-full">
         <button
@@ -302,17 +214,7 @@
                           (click)="myInput.select()"
                           (change)="onQuantityUpdate($event, idx)"
                         />
-                        <!-- <p-inputNumber
-                          class="p-inputtext-lg max-w-full"
-                          placeholder="Quantity"
-                          [disabled]="sendingOrder"
-                          [(ngModel)]="item.quantity"
-                          (onInput)="onQuantityUpdate($event)"
-                        ></p-inputNumber> -->
                       </div>
-                      <!-- <div class="p-1">
-                        {{ item.quantity }}
-                      </div> -->
                       <p-button
                         icon="pi pi-plus"
                         styleClass="p-button-secondary p-button-lg"
@@ -327,31 +229,6 @@
               </tr>
             </ng-template>
           </p-table>
-
-          <!---->
-          <!-- <div
-            *ngFor="let item of currentOrder?.items; let idx = index"
-            class="flex align-items-center justify-content-evenly w-full p-2 font-bold text-4xl"
-          >
-            <div class="item-name">{{ item.stub }}</div>
-            <div class="item-name">{{ item.price }}</div>
-            <div class="item-quantity flex align-items-center">
-              <p-button
-                icon="pi pi-minus"
-                styleClass="p-button-secondary mr-2"
-                (click)="decreaseQuantity(idx)"
-              ></p-button>
-              {{ item.quantity }}
-              <p-button
-                icon="pi pi-plus"
-                styleClass="p-button-secondary ml-2"
-                (click)="increaseQuantity(idx)"
-              ></p-button>
-            </div>
-            <div class="total-cost">
-              {{ item.totalCost }}
-            </div>
-          </div> -->
         </div>
       </div>
     </div>

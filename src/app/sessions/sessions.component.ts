@@ -149,21 +149,6 @@ export class SessionsComponent implements OnInit {
 
   onLookupDateSelect(date) {
     this.lookupDate = date;
-    // this.loadingLookups = true;
-    // this.sessionsService.searchSessions(date).subscribe(
-    //   (res: any[]) => {
-    //     this.loadingLookups = false;
-    //     this.sessionLookupResults = res;
-    //   },
-    //   (err) => {
-    //     this.showToast(
-    //       'error',
-    //       'Error',
-    //       'An error occurred while searching for sessions. Please try again',
-    //       5000
-    //     );
-    //   }
-    // );
   }
 
   onLookupTextInput(text) {

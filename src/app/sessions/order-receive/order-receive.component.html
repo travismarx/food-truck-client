@@ -21,13 +21,12 @@
             width="{{ labelWidth }}"
             [ngStyle]="{ width: labelWidth }"
           >
-            {{ now | date: "h:mm" }} ({{ avgOrderTime || 0 }})
+            {{ now | date : "h:mm" }} ({{ avgOrderTime || 0 }})
           </th>
         </tr>
       </thead>
 
       <tbody>
-        <!-- <tr class="empty-row-spacer"> -->
         <tr>
           <td class="empty-row-blank" colspan="100%"></td>
         </tr>
@@ -37,7 +36,6 @@
         <tr>
           <td class="empty-row-blank" colspan="100%"></td>
         </tr>
-        <!-- </tr> -->
         <tr>
           <td
             *ngFor="let item of quantityPerItem"
@@ -106,7 +104,7 @@
                 ({{
                   order.createdTimestamp &&
                     (nowTimestamp - order.createdTimestamp) / 60
-                    | number: "1.0-0"
+                    | number : "1.0-0"
                 }}m)
               </span>
             </div>
@@ -124,110 +122,12 @@
                 iconPos="right"
                 (click)="onOrderReady.emit(order.orderId)"
               >
-                <div class="flex flex-column">
-                  Ready
-                  <!-- <b *ngIf="order.buzzerNumber" class="pl-1">
-                    ({{ order.buzzerNumber }})
-                  </b> -->
-                </div>
+                <div class="flex flex-column">Ready</div>
               </p-button>
-              <!-- <button
-                pButton
-                pRipple
-                type="button"
-                icon="pi pi-check"
-                class="p-button-info"
-                (click)="onOrderReady.emit(order.orderId)"
-              ></button> -->
             </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <!-- <p-table [value]="menuLabels" responsiveLayout="scroll">
-  <ng-template pTemplate="header">
-    <tr class="font-bold surface-300">
-      <th *ngFor="let item of menuLabels">
-        {{ item.stub }}
-      </th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-item let-idx="rowIndex"> </ng-template>
-</p-table> -->
-
-  <!-- <h3>
-    Previous Orders
-    <p-progressSpinner
-      [style]="{ width: '15px', height: '15px' }"
-      strokeWidth="8"
-      *ngIf="loadingReadyOrders"
-      >Loading...</p-progressSpinner
-    >
-  </h3>
-  <div *ngFor="let order of readyOrders" class="flex">
-    <b class="mr-1">{{ order.customerName || "N/A" }} |</b>
-    <div class="mr-1">
-      {{ order.startTime | date: "shortTime" }} -
-      {{ order.readyTime | date: "shortTime" }} |
-    </div>
-    <div *ngIf="order.buzzerNumber" class="mr-1">
-      Buzzer: {{ order.buzzerNumber }} |
-    </div>
-    <div *ngIf="order.notes" class="mr-1">Notes: {{ order.notes }} |</div>
-    <div *ngFor="let item of order.items; let idx = index" class="ml-1">
-      {{ item.stub }} ({{ item.quantity }}){{
-        idx !== order.items.length - 1 ? "," : ""
-      }}
-    </div>
-  </div> -->
-  <!-- <h3>
-    Previous Orders
-    <p-progressSpinner
-      [style]="{ width: '15px', height: '15px' }"
-      strokeWidth="8"
-      *ngIf="loadingReadyOrders"
-      >Loading...</p-progressSpinner
-    >
-  </h3>
-  <p-table
-    [value]="readyOrders"
-    responsiveLayout="scroll"
-    [loading]="loadingReadyOrders"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Name</th>
-        <th style="width: 200px">Start - Ready</th>
-        <th>Items</th>
-        <th>Notes</th>
-        <th>Buzzer</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-order>
-      <tr>
-        <td>{{ order.customerName }}</td>
-        <td style="width: 200px">
-          {{ order.startTime | date: "shortTime" }} -
-          {{ order.readyTime | date: "shortTime" }}
-        </td>
-        <td style="min-width: 200px">
-          <div class="flex">
-            <div *ngFor="let item of order.items; let idx = index" class="mr-1">
-              {{ item.stub }} ({{ item.quantity }}){{
-                idx !== order.items.length - 1 ? ", " : ""
-              }}
-            </div>
-          </div>
-        </td>
-        <td>{{ order.notes }}</td>
-        <td>{{ order.buzzerNumber }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-  <p-paginator
-    [rows]="10"
-    [totalRecords]="readyOrdersCount"
-    (onPageChange)="paginate($event)"
-  ></p-paginator> -->
 </div>

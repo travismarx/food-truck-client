@@ -43,7 +43,6 @@ export class OrderReceiveComponent implements OnInit, OnChanges {
       this.now = new Date();
       this.nowTimestamp = this.getCurrentTimestampInSeconds();
     }, 1);
-    // this.menuLabels = this.menu.filter((item) => !item.ignore);
   }
 
   ngOnChanges(changes) {
@@ -76,7 +75,6 @@ export class OrderReceiveComponent implements OnInit, OnChanges {
           this.quantityPerItem = Array(this.menuLabels.length);
         }
       }
-      // this.formatOrders(changes.orders.currentValue);
     }
   }
 
@@ -91,10 +89,6 @@ export class OrderReceiveComponent implements OnInit, OnChanges {
   playAudio() {
     const audio = document.getElementById('audioplayer') as HTMLAudioElement;
     audio.play();
-    // let audio = new Audio();
-    // audio.src = '../../../assets/aooga.mp3';
-    // audio.load();
-    // audio.play();
   }
 
   getCurrentTimestampInSeconds() {
@@ -104,8 +98,6 @@ export class OrderReceiveComponent implements OnInit, OnChanges {
   paginate(event) {
     this.onReadyOrdersPaginate.emit(event);
   }
-
-  // formatOrders(orders) {}
 
   // This is BAD but whatever
   calculateQuantityPerItem(orders, localArrayName?) {
@@ -140,39 +132,4 @@ export class OrderReceiveComponent implements OnInit, OnChanges {
     });
     this.quantityPerItem = Object.values(tempQuantityObject);
   }
-
-  // EXTRA BAD because this does the same as the method above for a different array
-  // calculateQuantityPerItem(orders, localArrayName) {
-  //   console.log('ORDERS TO ITERATE: ', orders);
-  //   const tempQuantityObject = {};
-  //   for (let label of this.menuLabels) {
-  //     tempQuantityObject[label.stub] = {
-  //       quantity: 0,
-  //       colorCode: label.colorCode,
-  //     };
-  //   }
-  //   console.log('tempQuantityObject: ', tempQuantityObject);
-  //   for (let order of orders) {
-  //     console.log('order: ', order);
-  //     for (let item of order.items.filter((item) => !item.ignore)) {
-  //       console.log('TEMP QUANTITY OBJECT: ', tempQuantityObject);
-  //       tempQuantityObject[item.stub].quantity += item.quantity;
-  //     }
-  //     order.quantityObject = {};
-  //     for (let label of this.menuLabels) {
-  //       order.quantityObject[label.stub] = {
-  //         quantity:
-  //           order.items.filter((item) => item.stub === label.stub)[0]
-  //             ?.quantity || 0,
-  //         colorCode: label.colorCode,
-  //       };
-  //     }
-  //     console.log('formatted order: ', order);
-  //     order.quantityObject = Object.values(order.quantityObject);
-  //   }
-
-  //   this.formattedOrders = orders;
-  //   console.log('formatted orders: ', this.formattedOrders);
-  //   this.quantityPerItem = Object.values(tempQuantityObject);
-  // }
 }

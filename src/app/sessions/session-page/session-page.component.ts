@@ -54,14 +54,7 @@ export class SessionPageComponent implements OnInit {
     private socketioService: SocketioService
   ) {}
 
-  // changeTab(event: any) {
-  //   console.log('change tab to: ', event);
-  //   this.activeTabLabel = event.item.label;
-  //   this.chgRef.detectChanges();
-  // }
-
   ngOnInit(): void {
-    // this.activeTabLabel = this.menuItems[0].label;
     this.loadingSession = true;
     this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
       this.sessionId = +params.get('id')!;
@@ -106,10 +99,6 @@ export class SessionPageComponent implements OnInit {
         }
       );
     });
-
-    // setTimeout(() => {
-    //   this.listenForOrders();
-    // }, 1000);
   }
 
   disableSendButton() {
@@ -133,22 +122,14 @@ export class SessionPageComponent implements OnInit {
     for (let note of this.sessionInfo.notesOptions) {
       note.command = ($event) => this.enterQuickNote($event);
     }
-    // this.quickNotes = this.sessionInfo.quickNotes.map((note) => {
-    // });
   }
 
   applyDiscount(event) {
     this.currentOrder.discountId = event.value?.discountId;
     this.calculateTotalOrderCost();
-    // this.currentOrder.totalCost =
-    //   this.currentOrder.totalCost * (event.value.percentOff / 100);
   }
 
   enterQuickNote(event) {
-    // const currentNote =
-    //   typeof this.currentOrder.notes === 'string'
-    //     ? this.currentOrder.notes
-    //     : this.currentOrder.notes?.label;
     const newNote =
       typeof event.value === 'string' ? event.value : event.value?.label;
 
@@ -251,7 +232,6 @@ export class SessionPageComponent implements OnInit {
 
   onBuzzerInput(e: any) {
     this.currentOrder.buzzerNumber = e.value;
-    // this.calculateChange();
   }
 
   increaseAmountPaid(amount: number) {

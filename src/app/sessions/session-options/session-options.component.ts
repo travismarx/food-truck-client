@@ -16,7 +16,6 @@ export class SessionOptionsComponent implements OnInit {
   constructor(private confirmationService: ConfirmationService) {}
 
   ngOnInit(): void {
-    // console.log(this.incompleteOrdersLength);
     this.items = [
       {
         label: 'Home Page',
